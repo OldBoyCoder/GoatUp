@@ -6,6 +6,7 @@ typedef unsigned short word;
 typedef signed char sbyte;
 
 byte __at (0x4800) vram[32][32];
+byte __at (0x4800) vramflat[32*32];
 
 struct {
   byte scroll;
@@ -184,15 +185,26 @@ void wait_for_frame() {
 ///
 
 void main() {
+  int i;
+  int j;
   clrscr();
   clrobjs();
   enable_stars = 0xff;
+  enable_irq = 0;
+  for(j=0;j<32;j++)
+  {
+    memset(vramflat+j*32,9-j%10, 32);
+    
+  }
   enable_irq = 1;
   while (1) {
     wait_for_frame();
-    columns[2].scroll ++;
-    columns[3].scroll --;
-    sprites[0].ypos = 20;
+    for (i=0;i<32;i+=2)
+    {
+    	columns[i].scroll --;
+    	columns[i+1].scroll ++;
+    }
+    sprites[0].ypos++;
     sprites[0].xpos = 20;
     sprites[0].code = 1;
   }
