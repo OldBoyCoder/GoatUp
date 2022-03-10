@@ -181,7 +181,16 @@ void wait_for_frame() {
   watchdog++;
   while (video_framecount == initial_framecount);
 }
-
+void DrawAddress(int offset)
+{
+  putchar(5,0,offset & 15);
+  offset >>=4;
+  putchar(4,0,offset & 15);
+  offset >>=4;
+  putchar(3,0,offset & 15);
+  offset >>=4;
+  putchar(2,0,offset & 15);
+}
 ///
 
 void main() {
@@ -242,6 +251,7 @@ void main() {
   //memset(vramflat, BLANK, 32*32);
     *p =11*4;
     offset = p-vramflat;
+    DrawAddress(offset);
 //    sprites[0].ypos++;
     sprites[0].xpos = 24;
     sprites[0].ypos = 24;
