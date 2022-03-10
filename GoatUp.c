@@ -187,6 +187,7 @@ void wait_for_frame() {
 void main() {
   int i;
   int j;
+  signed int scroll = 8;
   clrscr();
   clrobjs();
   enable_stars = 0xff;
@@ -194,15 +195,29 @@ void main() {
   for(j=0;j<32;j++)
   {
     memset(vramflat+j*32,9-j%10, 32);
+    columns[j].scroll =scroll;
     
   }
   enable_irq = 1;
   while (1) {
     wait_for_frame();
-    for (i=0;i<32;i+=2)
+    scroll--;
+    if (scroll<0)
     {
-    	columns[i].scroll --;
-    	columns[i+1].scroll ++;
+     // scroll = 7;
+//      for(i=30;i>=0;i--)
+  //    	memcpy(vramflat+128+(i+1)*32, vramflat+128+i*32,28);
+      for (i=2;i<30;i++)
+      {
+          columns[i].scroll =scroll;
+      }
+    }
+    else
+    {
+      for (i=2;i<30;i++)
+      {
+          columns[i].scroll =scroll;
+      }
     }
     sprites[0].ypos++;
     sprites[0].xpos = 20;
