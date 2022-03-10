@@ -263,7 +263,6 @@ void init_sprites()
 void handle_input()
 {
   int i;
-  *p =oldchar;
   op =p;
   oldscroll = scroll;
   if (counter > 0) counter --;
@@ -282,12 +281,16 @@ void handle_input()
     if(scroll <-15) scroll=-15;
     if(scroll >15) scroll=15;
   }
-  if (p!=op || scroll != oldscroll) counter =8;
+  if (p!=op || scroll != oldscroll) 
+  {
+    *op = oldchar;
+    oldchar=*p;
+    counter =8;
+  }
   for (i=0;i<32;i++)
   {
     columns[i].scroll =scroll;
   }
-  oldchar=*p;
   *p =44;
   DrawAddress(p-vramflat);
 
