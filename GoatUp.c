@@ -225,10 +225,10 @@ void animate_missiles()
   byte i;
     for (i=0;i<8;i++)
     {
-    missiles[i].xpos = 96+i*8;
+    missiles[i].xpos = i*32;
     missiles[i].ypos = cosine[255&(cosindex +(i<<5))];
     }
-    cosindex++;
+    cosindex+=4;
 }
 void animate_goat()
 {
