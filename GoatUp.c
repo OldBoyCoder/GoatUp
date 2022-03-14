@@ -241,6 +241,8 @@ void animate_missiles()
     {
     missiles[i].xpos = i*32;
     missiles[i].ypos = cosine[255&(cosindex +(i<<5))];
+    missiles[i].dx=-2;
+      missiles[i].dy = -1;
     }
     cosindex+=4;
 }
@@ -278,7 +280,7 @@ void handle_input()
     if (RIGHT1 ) p-=32;
     if (FIRE1 ) scroll+=1;
     if (BOMB1 ) scroll-=1;
-    if (START1) enable_stars = 0xff;
+    if (START1) enable_stars = 0x1;
     if (COIN1) enable_stars = 0x00;
     if (p<vramflat) p = p+32*32;
     if(p>vramflat+32*32) p =p-32*32;
@@ -324,7 +326,7 @@ void writelineofgrass()
   int j;
   columns[grassy].attrib =7;
   columns[grassy+1].attrib =7;
-  for(j=0;j<16;j++)
+  for(j=0;j<32;j++)
   {
     *(vramflat+j*32+grassy) = 18*4 +(grassscroll*2);
     *(vramflat+j*32+grassy+1) = 18*4+1 +(grassscroll*2);
@@ -341,7 +343,7 @@ void scrollgrass()
     grassscroll ++;
     if (grassscroll ==8)
     {
-  for(j=0;j<16;j++)
+  for(j=0;j<32;j++)
   {
     *(vramflat+j*32+grassy) = BLANK;
     *(vramflat+j*32+grassy+1) = BLANK;
@@ -371,8 +373,9 @@ void main() {
   enable_irq = 1;
   oldchar = *p;
   write_helptext();
+  missile_width =4;
+  missile_offset =0;
   while (1) {
-    wait_for_frame();
 
     // Use controls to move target around and scroll columns
     handle_input();
@@ -383,5 +386,6 @@ void main() {
     // Move the grass platform around
     scrollgrass();
     writelineofgrass();
+    wait_for_frame();
   }
 }
